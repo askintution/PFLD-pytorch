@@ -48,6 +48,8 @@ def train(train_loader, plfd_backbone, auxiliarynet, criterion, optimizer,
           epoch):
     losses = AverageMeter()
 
+    # 根据PFLD计算关键点landmarks
+    # 根据Auxiliarynet计算angle
     for img, landmark_gt, attribute_gt, euler_angle_gt in train_loader:
         img = img.to(device)
         attribute_gt = attribute_gt.to(device)

@@ -27,6 +27,12 @@ def conv_1x1_bn(inp, oup):
         nn.ReLU(inplace=True))
 
 
+"""
+MobileNet V2中的模块
+1. 先用1*1卷积升通道
+2. 用3*3卷积
+3. 用1*1卷积降通道
+"""
 class InvertedResidual(nn.Module):
     def __init__(self, inp, oup, stride, use_res_connect, expand_ratio=6):
         super(InvertedResidual, self).__init__()
@@ -100,6 +106,11 @@ class PFLDInference(nn.Module):
         self.avg_pool2 = nn.AvgPool2d(7)
         self.fc = nn.Linear(176, 196)
 
+    """
+    融合3个尺度的信息，用于模型的关键点回归
+
+
+    """
     def forward(self, x):  # x: 3, 112, 112
         x = self.relu(self.bn1(self.conv1(x)))  # [64, 56, 56]
         x = self.relu(self.bn2(self.conv2(x)))  # [64, 56, 56]
@@ -116,6 +127,7 @@ class PFLDInference(nn.Module):
         x = self.block5_4(x)
         x = self.block5_5(x)
         x = self.block5_6(x)
+        
         x = self.conv6_1(x)
         x1 = self.avg_pool1(x)
         x1 = x1.view(x1.size(0), -1)

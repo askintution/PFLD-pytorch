@@ -158,6 +158,8 @@ class WLFWDatasets(data.Dataset):
         self.line = self.lines[index].strip().split()
         self.img = cv2.imread(self.line[0])
         self.landmark = np.asarray(self.line[1:197], dtype=np.float32)
+
+        # 是否模糊 是否遮挡 是否有夸张表情等属性
         self.attribute = np.asarray(self.line[197:203], dtype=np.int32)
         self.euler_angle = np.asarray(self.line[203:206], dtype=np.float32)
         if self.transforms:
